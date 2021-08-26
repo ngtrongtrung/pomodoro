@@ -4,7 +4,7 @@ class ProgressIcons extends StatelessWidget {
   final int total;
   final int done;
 
-  ProgressIcons({required this.total, required this.done})
+  const ProgressIcons({required this.total, required this.done})
       : assert(total >= 0),
         assert(done >= 0);
 
