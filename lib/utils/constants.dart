@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:pomodoro/models/pomodoro_status.dart';
 
-const int POMODORO_TOTAL_TIME = 10;
-const int SHORT_BREAK_TIME = 3;
-const int LONG_BREAK_TIME = 5;
-const int POMODORO_PER_SET = 4;
+const int POMODORO_TOTAL_TIME = 20;
+const int SHORT_BREAK_TIME = 10;
+const int LONG_BREAK_TIME = 20;
+const int POMODORO_PER_SET = 2;
 
 const Map<PomodoroStatus, String> statusDescription = {
   PomodoroStatus.RUNNING: 'Pomodoro is running, time to be focused',

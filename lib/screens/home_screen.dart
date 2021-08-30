@@ -26,7 +26,6 @@ class _HomeScreenState extends State<HomeScreen> {
   String mainButtonText = _buttonTextStart;
   PomodoroStatus pomodoroStatus = PomodoroStatus.PAUSED;
   Timer? _timer;
-  int _pomodoroNumber = 0;
   int _setNum = 0;
 
   // static AudioCache player = AudioCache();
@@ -49,8 +48,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 height: 10,
               ),
               Text(
-                'Pomodoro number: ${_pomodoroNumber}',
-                style: TextStyle(fontSize: 32, color: Colors.white),
+                'Pomodoro Technique',
+                style: TextStyle(
+                  fontSize: 32,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               SizedBox(
                 height: 10,
@@ -70,7 +73,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       circularStrokeCap: CircularStrokeCap.round,
                       center: Text(
                         _secondsToFormatedString(remainingTime),
-                        style: TextStyle(fontSize: 22, color: Colors.white),
+                        style: TextStyle(fontSize: 40, color: Colors.white),
                       ),
                       progressColor: statusColor[pomodoroStatus],
                     ),
@@ -79,7 +82,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     ProgressIcons(
                       total: POMODORO_PER_SET,
-                      done: _pomodoroNumber - _setNum * POMODORO_PER_SET,
+                      done: _setNum,
                     ),
                     SizedBox(
                       height: 10,
@@ -94,7 +97,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       onTap: _mainButtonPressed,
                     ),
                     CustomButton(
-                      label: "Reset",
+                      label: "$_buttonTextReset",
                       onTap: _resetButtonPressed,
                     ),
                   ],
@@ -116,13 +119,13 @@ class _HomeScreenState extends State<HomeScreen> {
   String _secondsToFormatedString(int seconds) {
     int roundedMinutes = seconds ~/ 60;
     int remainingSeconds = seconds - roundedMinutes * 60;
-    String remainingSecondsFormated;
+    String remainingSecondsFormated = "";
 
     if (remainingSeconds < 10) {
       remainingSecondsFormated = '0';
-    } else {
-      remainingSecondsFormated = remainingSeconds.toString();
     }
+
+    remainingSecondsFormated += remainingSeconds.toString();
     return '$roundedMinutes:$remainingSecondsFormated';
   }
 
@@ -197,13 +200,14 @@ class _HomeScreenState extends State<HomeScreen> {
         });
       } else {
         _playSound();
-        _pomodoroNumber++;
+        _setNum++;
         _cancelTimer();
-        if (_pomodoroNumber % POMODORO_PER_SET == 0) {
+        if (_setNum % POMODORO_PER_SET == 0) {
           pomodoroStatus = PomodoroStatus.PAUSED_LONG_BREAK;
           setState(() {
             remainingTime = LONG_BREAK_TIME;
             mainButtonText = _buttonTextStartLongBreak;
+            _setNum = 0;
           });
         } else {
           pomodoroStatus = PomodoroStatus.PAUSED_SHORT_BREAK;
@@ -231,7 +235,6 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   _resetButtonPressed() {
-    this._pomodoroNumber = 0;
     _setNum = 0;
     _cancelTimer();
     _stopCountdown();
