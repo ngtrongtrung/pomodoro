@@ -1,8 +1,12 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+
 import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:provider/provider.dart';
+
 import 'package:pomodoro/models/pomodoro_status.dart';
+import 'package:pomodoro/theme/app_theme.dart';
 import 'package:pomodoro/utils/constants.dart';
 import 'package:pomodoro/widgets/action_button.dart';
 
@@ -26,6 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<AppThemeProvider>(context, listen: false);
     return Scaffold(
       body: SafeArea(
         child: Center(
@@ -42,8 +47,12 @@ class _HomeScreenState extends State<HomeScreen> {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         IconButton(
-                          onPressed: () {},
-                          icon: Icon(Icons.dark_mode_outlined),
+                          onPressed: () {
+                            provider.toggleTheme();
+                          },
+                          icon: Icon(provider.isDarkMode
+                              ? Icons.dark_mode
+                              : Icons.dark_mode_outlined),
                           padding: EdgeInsets.all(4),
                           iconSize: 26.0,
                         )

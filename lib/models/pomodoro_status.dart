@@ -3,5 +3,4 @@ enum PomodoroStatus {
   PAUSED,
   RUNNING_SHORT_BREAK,
   PAUSED_SHORT_BREAK,
-  // FINISHED
 }
