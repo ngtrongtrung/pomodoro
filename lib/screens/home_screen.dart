@@ -4,65 +4,61 @@ import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:pomodoro/models/pomodoro_status.dart';
 import 'package:pomodoro/utils/constants.dart';
-import 'package:pomodoro/widgets/custom_button.dart';
-import 'package:pomodoro/widgets/progress_icons.dart';
+import 'package:pomodoro/widgets/action_button.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
 
-const _buttonTextStart = 'START POMODORO';
-const _buttonTextResumePomodoro = "RESUME POMODORO";
+const _buttonTextStart = 'START';
+const _buttonTextResumePomodoro = "RESUME";
 const _buttonTextResumeBreak = "RESUME BREAK";
-const _buttonTextStartShortBreak = "TAKE SHORT BREAK";
-const _buttonTextStartLongBreak = "TAKE LONG BREAK";
-const _buttonTextStartNewSet = "START NEW SET";
+const _buttonTextStartShortBreak = "BREAK";
 const _buttonTextPause = "PAUSE";
 const _buttonTextReset = "RESET";
 
 class _HomeScreenState extends State<HomeScreen> {
-  int remainingTime = POMODORO_TOTAL_TIME;
-  String mainButtonText = _buttonTextStart;
+  int _remainingTime = POMODORO_TOTAL_TIME;
+  String _mainButtonText = _buttonTextStart;
   PomodoroStatus pomodoroStatus = PomodoroStatus.PAUSED;
   Timer? _timer;
-  int _setNum = 0;
-
-  // static AudioCache player = AudioCache();
-
-  @override
-  void initState() {
-    super.initState();
-    // player.load(fileName);
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[900],
       body: SafeArea(
         child: Center(
           child: Column(
             children: [
-              SizedBox(
-                height: 10,
-              ),
-              Text(
-                'Pomodoro Technique',
-                style: TextStyle(
-                  fontSize: 32,
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
+              Expanded(
+                flex: 2,
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        IconButton(
+                          onPressed: () {},
+                          icon: Icon(Icons.dark_mode_outlined),
+                          padding: EdgeInsets.all(4),
+                          iconSize: 26.0,
+                        )
+                      ],
+                    ),
+                    Text(
+                      'Pomodoro Technique',
+                      style:
+                          TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
+                    ),
+                  ],
                 ),
               ),
-              SizedBox(
-                height: 10,
-              ),
-              Text(
-                'Set: $_setNum',
-                style: TextStyle(fontSize: 22, color: Colors.white),
-              ),
               Expanded(
+                flex: 4,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -72,37 +68,45 @@ class _HomeScreenState extends State<HomeScreen> {
                       percent: _getPomodoroPercentage(),
                       circularStrokeCap: CircularStrokeCap.round,
                       center: Text(
-                        _secondsToFormatedString(remainingTime),
-                        style: TextStyle(fontSize: 40, color: Colors.white),
+                        _secondsToFormatedString(_remainingTime),
+                        style: TextStyle(
+                          fontSize: 48,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                       progressColor: statusColor[pomodoroStatus],
                     ),
                     SizedBox(
                       height: 10,
                     ),
-                    ProgressIcons(
-                      total: POMODORO_PER_SET,
-                      done: _setNum,
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Text('${statusDescription[this.pomodoroStatus]}',
-                        style: TextStyle(color: Colors.white)),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    CustomButton(
-                      label: "$mainButtonText",
-                      onTap: _mainButtonPressed,
-                    ),
-                    CustomButton(
-                      label: "$_buttonTextReset",
-                      onTap: _resetButtonPressed,
-                    ),
                   ],
                 ),
               ),
+              Expanded(
+                flex: 3,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        ActionButton(
+                          label: _buttonTextReset,
+                          onTap: _resetButtonPressed,
+                        ),
+                        ActionButton(
+                          label: "$_mainButtonText",
+                          onTap: _mainButtonPressed,
+                          isFilled: true,
+                        ),
+                      ],
+                    ),
+                    Text(
+                      '${statusDescription[this.pomodoroStatus]}',
+                    ),
+                  ],
+                ),
+              )
             ],
           ),
         ),
@@ -119,14 +123,9 @@ class _HomeScreenState extends State<HomeScreen> {
   String _secondsToFormatedString(int seconds) {
     int roundedMinutes = seconds ~/ 60;
     int remainingSeconds = seconds - roundedMinutes * 60;
-    String remainingSecondsFormated = "";
-
-    if (remainingSeconds < 10) {
-      remainingSecondsFormated = '0';
-    }
-
-    remainingSecondsFormated += remainingSeconds.toString();
-    return '$roundedMinutes:$remainingSecondsFormated';
+    return '$roundedMinutes:' +
+        (remainingSeconds < 10 ? '0' : '') +
+        remainingSeconds.toString();
   }
 
   _mainButtonPressed() {
@@ -138,20 +137,11 @@ class _HomeScreenState extends State<HomeScreen> {
       case PomodoroStatus.RUNNING:
         _pausePomodoroCountdown();
         break;
-      case PomodoroStatus.RUNNING_SHORT_BREAK:
-        _pauseShortBreakCountdown();
-        break;
       case PomodoroStatus.PAUSED_SHORT_BREAK:
         _startShortBreak();
         break;
-      case PomodoroStatus.RUNNING_LONG_BREAK:
-        _pauseLongBreakCountdown();
-        break;
-      case PomodoroStatus.PAUSED_LONG_BREAK:
-        _startLongBreak();
-        break;
-      case PomodoroStatus.FINISHED:
-        _startPomodoroCountdown();
+      case PomodoroStatus.RUNNING_SHORT_BREAK:
+        _pauseShortBreakCountdown();
         break;
     }
   }
@@ -162,7 +152,6 @@ class _HomeScreenState extends State<HomeScreen> {
       case PomodoroStatus.RUNNING:
         totalTime = POMODORO_TOTAL_TIME;
         break;
-
       case PomodoroStatus.PAUSED:
         totalTime = POMODORO_TOTAL_TIME;
         break;
@@ -172,50 +161,28 @@ class _HomeScreenState extends State<HomeScreen> {
       case PomodoroStatus.PAUSED_SHORT_BREAK:
         totalTime = SHORT_BREAK_TIME;
         break;
-      case PomodoroStatus.RUNNING_LONG_BREAK:
-        totalTime = LONG_BREAK_TIME;
-        break;
-      case PomodoroStatus.PAUSED_LONG_BREAK:
-        totalTime = LONG_BREAK_TIME;
-        break;
-      case PomodoroStatus.FINISHED:
-        totalTime = POMODORO_TOTAL_TIME;
-        break;
     }
 
-    return (totalTime - remainingTime) / totalTime;
+    return (totalTime - _remainingTime) / totalTime;
   }
 
   void _startPomodoroCountdown() {
     pomodoroStatus = PomodoroStatus.RUNNING;
-    if (_timer != null) {
-      _timer!.cancel();
-    }
-
+    this._cancelTimer();
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
-      if (remainingTime > 0) {
+      if (_remainingTime > 0) {
         setState(() {
-          remainingTime--;
-          mainButtonText = _buttonTextPause;
+          _remainingTime--;
+          _mainButtonText = _buttonTextPause;
         });
       } else {
         _playSound();
-        _setNum++;
         _cancelTimer();
-        if (_setNum % POMODORO_PER_SET == 0) {
-          pomodoroStatus = PomodoroStatus.PAUSED_LONG_BREAK;
-          setState(() {
-            remainingTime = LONG_BREAK_TIME;
-            mainButtonText = _buttonTextStartLongBreak;
-            _setNum = 0;
-          });
-        } else {
-          pomodoroStatus = PomodoroStatus.PAUSED_SHORT_BREAK;
-          setState(() {
-            remainingTime = SHORT_BREAK_TIME;
-            mainButtonText = _buttonTextStartShortBreak;
-          });
-        }
+        pomodoroStatus = PomodoroStatus.PAUSED_SHORT_BREAK;
+        setState(() {
+          _remainingTime = SHORT_BREAK_TIME;
+          _mainButtonText = _buttonTextStartShortBreak;
+        });
       }
     });
   }
@@ -230,12 +197,11 @@ class _HomeScreenState extends State<HomeScreen> {
     pomodoroStatus = PomodoroStatus.PAUSED;
     _cancelTimer();
     setState(() {
-      mainButtonText = _buttonTextResumePomodoro;
+      _mainButtonText = _buttonTextResumePomodoro;
     });
   }
 
   _resetButtonPressed() {
-    _setNum = 0;
     _cancelTimer();
     _stopCountdown();
   }
@@ -243,8 +209,8 @@ class _HomeScreenState extends State<HomeScreen> {
   void _stopCountdown() {
     pomodoroStatus = PomodoroStatus.PAUSED;
     setState(() {
-      mainButtonText = _buttonTextStart;
-      remainingTime = POMODORO_TOTAL_TIME;
+      _mainButtonText = _buttonTextStart;
+      _remainingTime = POMODORO_TOTAL_TIME;
     });
   }
 
@@ -253,59 +219,31 @@ class _HomeScreenState extends State<HomeScreen> {
     _pauseBreakCountdown();
   }
 
-  void _pauseLongBreakCountdown() {
-    pomodoroStatus = PomodoroStatus.PAUSED_LONG_BREAK;
-    _pauseBreakCountdown();
-  }
-
   void _pauseBreakCountdown() {
     _cancelTimer();
     setState(() {
-      mainButtonText = _buttonTextResumeBreak;
+      _mainButtonText = _buttonTextResumeBreak;
     });
   }
 
   void _startShortBreak() {
     pomodoroStatus = PomodoroStatus.RUNNING_SHORT_BREAK;
     setState(() {
-      mainButtonText = _buttonTextPause;
+      _mainButtonText = _buttonTextPause;
     });
     _cancelTimer();
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
-      if (remainingTime > 0) {
+      if (_remainingTime > 0) {
         setState(() {
-          remainingTime--;
+          _remainingTime--;
         });
       } else {
         _playSound();
-        remainingTime = POMODORO_TOTAL_TIME;
         _cancelTimer();
+        _remainingTime = POMODORO_TOTAL_TIME;
         pomodoroStatus = PomodoroStatus.PAUSED;
         setState(() {
-          mainButtonText = _buttonTextStart;
-        });
-      }
-    });
-  }
-
-  void _startLongBreak() {
-    pomodoroStatus = PomodoroStatus.RUNNING_LONG_BREAK;
-    setState(() {
-      mainButtonText = _buttonTextPause;
-    });
-    _cancelTimer();
-    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
-      if (remainingTime > 0) {
-        setState(() {
-          remainingTime--;
-        });
-      } else {
-        _playSound();
-        remainingTime = POMODORO_TOTAL_TIME;
-        _cancelTimer();
-        pomodoroStatus = PomodoroStatus.FINISHED;
-        setState(() {
-          mainButtonText = _buttonTextStartNewSet;
+          _mainButtonText = _buttonTextStart;
         });
       }
     });
@@ -313,6 +251,5 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _playSound() {
     debugPrint('playSound');
-    // player.play()
   }
 }

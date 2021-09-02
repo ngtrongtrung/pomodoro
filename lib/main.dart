@@ -12,10 +12,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Pomodoro',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.yellow,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
+      theme: ThemeData(),
       home: HomeScreen(),
     );
   }
