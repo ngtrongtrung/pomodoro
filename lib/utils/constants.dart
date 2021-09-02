@@ -19,3 +19,6 @@ const Map<PomodoroStatus, Color> statusColor = {
   PomodoroStatus.RUNNING_SHORT_BREAK: Colors.red,
   PomodoroStatus.PAUSED_SHORT_BREAK: Colors.orange,
 };
+
+const int MINIMUM_TABLET_WIDTH = 650;
+const int MINIMUM_DESKTOP_WIDTH = 1100;

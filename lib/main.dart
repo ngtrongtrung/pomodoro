@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
 
-import 'package:pomodoro/screens/home_screen.dart';
+import 'package:pomodoro/screens/home_screen/home_screen.dart';
 import 'package:pomodoro/theme/app_theme.dart';
 
 void main() {
