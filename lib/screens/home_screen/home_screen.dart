@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pomodoro/reponsive.dart';
-import 'package:pomodoro/screens/home_screen/mobile_screen.dart';
+import 'package:pomodoro/screens/home_screen/mobile/mobile_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   @override

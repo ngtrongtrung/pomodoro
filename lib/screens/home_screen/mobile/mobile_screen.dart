@@ -2,12 +2,11 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:pomodoro/blocs/app_theme/app_theme_bloc.dart';
-import 'package:pomodoro/blocs/app_theme/app_theme_event.dart';
 import 'package:pomodoro/models/pomodoro_status.dart';
+import 'package:pomodoro/screens/home_screen/mobile/mobile_landscape_layout.dart';
+import 'package:pomodoro/screens/home_screen/mobile/mobile_portrait_layout.dart';
 import 'package:pomodoro/utils/constants.dart';
-import 'package:pomodoro/widgets/action_button.dart';
 
 class MobileHomeScreen extends StatefulWidget {
   const MobileHomeScreen({Key? key}) : super(key: key);
@@ -35,97 +34,38 @@ class _MobileHomeScreenState extends State<MobileHomeScreen> {
     appThemeBloc = BlocProvider.of<AppThemeBloc>(context);
   }
 
+  Widget getLayoutWhenLandscape() {
+    return Container();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Center(
-          child: Column(
-            children: [
-              Expanded(
-                flex: 2,
-                child: Column(
-                  children: [
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        IconButton(
-                          onPressed: () {
-                            appThemeBloc.add(ToggleAppTheme());
-                          },
-                          icon: Icon(appThemeBloc.isDarkMode
-                              ? Icons.dark_mode
-                              : Icons.dark_mode_outlined),
-                          padding: EdgeInsets.all(4),
-                          iconSize: 26.0,
-                        )
-                      ],
-                    ),
-                    Text(
-                      'Pomodoro Technique',
-                      style:
-                          TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
-                    ),
-                  ],
-                ),
-              ),
-              Expanded(
-                flex: 4,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    CircularPercentIndicator(
-                      radius: 220.0,
-                      lineWidth: 15.0,
-                      percent: _getPomodoroPercentage(),
-                      circularStrokeCap: CircularStrokeCap.round,
-                      center: Text(
-                        _secondsToFormatedString(_remainingTime),
-                        style: TextStyle(
-                          fontSize: 48,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      progressColor: statusColor[pomodoroStatus],
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                  ],
-                ),
-              ),
-              Expanded(
-                flex: 3,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        ActionButton(
-                          label: _buttonTextReset,
-                          onTap: _resetButtonPressed,
-                        ),
-                        ActionButton(
-                          label: "$_mainButtonText",
-                          onTap: _mainButtonPressed,
-                          isFilled: true,
-                        ),
-                      ],
-                    ),
-                    Text(
-                      '${statusDescription[this.pomodoroStatus]}',
-                    ),
-                  ],
-                ),
-              )
-            ],
-          ),
-        ),
-      ),
+    return OrientationBuilder(
+      builder: (context, orientation) {
+        if (orientation == Orientation.landscape) {
+          return MobileLandscapeLayout(
+            pomodoroPercentage: this._getPomodoroPercentage(),
+            timeRemain: _secondsToFormatedString(_remainingTime),
+            statusColor: statusColor[pomodoroStatus] ?? Colors.transparent,
+            resetButtonText: _buttonTextReset,
+            mainButtonText: this._mainButtonText,
+            mainButtonPressed: this._mainButtonPressed,
+            resetButtonPressed: this._resetButtonPressed,
+            description: '${statusDescription[this.pomodoroStatus]}',
+          );
+        } else {
+          return MobilePortraitLayout(
+            pomodoroPercentage: this._getPomodoroPercentage(),
+            timeRemain: _secondsToFormatedString(_remainingTime),
+            statusColor: statusColor[pomodoroStatus] ?? Colors.transparent,
+            resetButtonText: _buttonTextReset,
+            mainButtonText: this._mainButtonText,
+            mainButtonPressed: this._mainButtonPressed,
+            resetButtonPressed: this._resetButtonPressed,
+            description: '${statusDescription[this.pomodoroStatus]}',
+          );
+        }
+      },
     );
   }
 
@@ -143,7 +83,7 @@ class _MobileHomeScreenState extends State<MobileHomeScreen> {
         remainingSeconds.toString();
   }
 
-  _mainButtonPressed() {
+  void _mainButtonPressed() {
     debugPrint('_mainButtonPressed');
     switch (pomodoroStatus) {
       case PomodoroStatus.PAUSED:
@@ -216,7 +156,7 @@ class _MobileHomeScreenState extends State<MobileHomeScreen> {
     });
   }
 
-  _resetButtonPressed() {
+  void _resetButtonPressed() {
     _cancelTimer();
     _stopCountdown();
   }
