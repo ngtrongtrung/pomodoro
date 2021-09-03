@@ -6,9 +6,11 @@ class AppThemeState extends Equatable {
   List<Object?> get props => [];
 }
 
-class AppThemeInitial extends AppThemeState {
+class AppThemeInitial extends AppThemeState {}
+
+class AppThemeLocal extends AppThemeState {
   final ThemeMode themeMode;
-  AppThemeInitial({required this.themeMode});
+  AppThemeLocal({required this.themeMode});
 
   @override
   List<Object> get props => [themeMode];

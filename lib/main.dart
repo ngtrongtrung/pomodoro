@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pomodoro/blocs/app_theme/app_theme_bloc.dart';
+import 'package:pomodoro/blocs/app_theme/app_theme_event.dart';
 import 'package:pomodoro/blocs/app_theme/app_theme_state.dart';
 import 'package:pomodoro/screens/home_screen/home_screen.dart';
 import 'package:pomodoro/theme/app_theme.dart';
@@ -22,9 +23,10 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<AppThemeBloc>(
-      create: (context) => AppThemeBloc(),
+      create: (context) => AppThemeBloc()..add(GetAppThemeFromStorage()),
       child: BlocBuilder<AppThemeBloc, AppThemeState>(
         builder: (context, state) {
+          if (state is AppThemeInitial) return Container();
           ThemeMode themeMode = state.props[0] as ThemeMode;
           return MaterialApp(
             title: 'Pomodoro',
