@@ -1,8 +1,12 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:pomodoro/blocs/app_theme/app_theme_bloc.dart';
+import 'package:pomodoro/blocs/app_theme/app_theme_event.dart';
+import 'package:pomodoro/blocs/app_theme/app_theme_state.dart';
 import 'package:provider/provider.dart';
 
 import 'package:pomodoro/models/pomodoro_status.dart';
@@ -27,10 +31,15 @@ class _HomeScreenState extends State<HomeScreen> {
   String _mainButtonText = _buttonTextStart;
   PomodoroStatus pomodoroStatus = PomodoroStatus.PAUSED;
   Timer? _timer;
+  late final appThemeBloc;
+  @override
+  void initState() {
+    super.initState();
+    appThemeBloc = BlocProvider.of<AppThemeBloc>(context);
+  }
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<AppThemeProvider>(context, listen: false);
     return Scaffold(
       body: SafeArea(
         child: Center(
@@ -48,9 +57,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       children: [
                         IconButton(
                           onPressed: () {
-                            provider.toggleTheme();
+                            appThemeBloc.add(ToggleAppTheme());
                           },
-                          icon: Icon(provider.isDarkMode
+                          icon: Icon(appThemeBloc.isDarkMode
                               ? Icons.dark_mode
                               : Icons.dark_mode_outlined),
                           padding: EdgeInsets.all(4),

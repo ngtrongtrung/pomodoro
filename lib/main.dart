@@ -1,30 +1,41 @@
 import 'package:flutter/material.dart';
-
-import 'package:provider/provider.dart';
-
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pomodoro/blocs/app_theme/app_theme_bloc.dart';
+import 'package:pomodoro/blocs/app_theme/app_theme_state.dart';
 import 'package:pomodoro/screens/home_screen.dart';
 import 'package:pomodoro/theme/app_theme.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(
+    MyApp(),
+  );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  const MyApp({Key? key}) : super(key: key);
+
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => AppThemeProvider(),
-      builder: (context, _) {
-        final themeProvider = Provider.of<AppThemeProvider>(context);
-        return MaterialApp(
-          title: 'Pomodoro',
-          debugShowCheckedModeBanner: false,
-          themeMode: themeProvider.themeMode,
-          darkTheme: AppThemes.darkTheme,
-          theme: AppThemes.lightTheme,
-          home: HomeScreen(),
-        );
-      },
+    return BlocProvider<AppThemeBloc>(
+      create: (context) => AppThemeBloc(),
+      child: BlocBuilder<AppThemeBloc, AppThemeState>(
+        builder: (context, state) {
+          ThemeMode themeMode = state.props[0] as ThemeMode;
+          return MaterialApp(
+            title: 'Pomodoro',
+            debugShowCheckedModeBanner: false,
+            themeMode: themeMode,
+            darkTheme: AppThemes.darkTheme,
+            theme: AppThemes.lightTheme,
+            home: HomeScreen(),
+          );
+        },
+      ),
     );
   }
 }
