@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pomodoro/blocs/app_theme/app_theme_bloc.dart';
 import 'package:pomodoro/theme/app_color.dart';
-import 'package:pomodoro/theme/app_theme.dart';
 
 class ActionButton extends StatelessWidget {
   final Function()? onTap;
@@ -12,10 +11,10 @@ class ActionButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final double diameter = 90.0;
-    final themeProvider = Provider.of<AppThemeProvider>(context);
+    final appThemeBloc = BlocProvider.of<AppThemeBloc>(context);
 
     Color getLabelColor() {
-      if (themeProvider.isDarkMode) {
+      if (appThemeBloc.isDarkMode) {
         return this.isFilled ? DEAF_COVE : JAVA;
       }
       return DEAF_COVE;

@@ -1,12 +1,13 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:pomodoro/blocs/app_theme/app_theme_bloc.dart';
+import 'package:pomodoro/blocs/app_theme/app_theme_event.dart';
 import 'package:pomodoro/models/pomodoro_status.dart';
-import 'package:pomodoro/theme/app_theme.dart';
 import 'package:pomodoro/utils/constants.dart';
 import 'package:pomodoro/widgets/action_button.dart';
-import 'package:provider/provider.dart';
 
 class MobileHomeScreen extends StatefulWidget {
   const MobileHomeScreen({Key? key}) : super(key: key);
@@ -27,94 +28,102 @@ class _MobileHomeScreenState extends State<MobileHomeScreen> {
   String _mainButtonText = _buttonTextStart;
   PomodoroStatus pomodoroStatus = PomodoroStatus.PAUSED;
   Timer? _timer;
+  late final appThemeBloc;
+  @override
+  void initState() {
+    super.initState();
+    appThemeBloc = BlocProvider.of<AppThemeBloc>(context);
+  }
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<AppThemeProvider>(context, listen: false);
-    return SafeArea(
-      child: Center(
-        child: Column(
-          children: [
-            Expanded(
-              flex: 2,
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      IconButton(
-                        onPressed: () {
-                          provider.toggleTheme();
-                        },
-                        icon: Icon(provider.isDarkMode
-                            ? Icons.dark_mode
-                            : Icons.dark_mode_outlined),
-                        padding: EdgeInsets.all(4),
-                        iconSize: 26.0,
-                      )
-                    ],
-                  ),
-                  Text(
-                    'Pomodoro Technique',
-                    style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
-                  ),
-                ],
-              ),
-            ),
-            Expanded(
-              flex: 4,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  CircularPercentIndicator(
-                    radius: 220.0,
-                    lineWidth: 15.0,
-                    percent: _getPomodoroPercentage(),
-                    circularStrokeCap: CircularStrokeCap.round,
-                    center: Text(
-                      _secondsToFormatedString(_remainingTime),
-                      style: TextStyle(
-                        fontSize: 48,
-                        fontWeight: FontWeight.bold,
-                      ),
+    return Scaffold(
+      body: SafeArea(
+        child: Center(
+          child: Column(
+            children: [
+              Expanded(
+                flex: 2,
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: 10,
                     ),
-                    progressColor: statusColor[pomodoroStatus],
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                ],
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        IconButton(
+                          onPressed: () {
+                            appThemeBloc.add(ToggleAppTheme());
+                          },
+                          icon: Icon(appThemeBloc.isDarkMode
+                              ? Icons.dark_mode
+                              : Icons.dark_mode_outlined),
+                          padding: EdgeInsets.all(4),
+                          iconSize: 26.0,
+                        )
+                      ],
+                    ),
+                    Text(
+                      'Pomodoro Technique',
+                      style:
+                          TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            Expanded(
-              flex: 3,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      ActionButton(
-                        label: _buttonTextReset,
-                        onTap: _resetButtonPressed,
+              Expanded(
+                flex: 4,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CircularPercentIndicator(
+                      radius: 220.0,
+                      lineWidth: 15.0,
+                      percent: _getPomodoroPercentage(),
+                      circularStrokeCap: CircularStrokeCap.round,
+                      center: Text(
+                        _secondsToFormatedString(_remainingTime),
+                        style: TextStyle(
+                          fontSize: 48,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                      ActionButton(
-                        label: "$_mainButtonText",
-                        onTap: _mainButtonPressed,
-                        isFilled: true,
-                      ),
-                    ],
-                  ),
-                  Text(
-                    '${statusDescription[this.pomodoroStatus]}',
-                  ),
-                ],
+                      progressColor: statusColor[pomodoroStatus],
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                  ],
+                ),
               ),
-            )
-          ],
+              Expanded(
+                flex: 3,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        ActionButton(
+                          label: _buttonTextReset,
+                          onTap: _resetButtonPressed,
+                        ),
+                        ActionButton(
+                          label: "$_mainButtonText",
+                          onTap: _mainButtonPressed,
+                          isFilled: true,
+                        ),
+                      ],
+                    ),
+                    Text(
+                      '${statusDescription[this.pomodoroStatus]}',
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
