@@ -7,11 +7,13 @@ class AppThemes {
     scaffoldBackgroundColor: DEAF_COVE,
     colorScheme: ColorScheme.dark(),
     brightness: Brightness.dark,
+    canvasColor: NAVY,
   );
 
   static final lightTheme = ThemeData(
     scaffoldBackgroundColor: Colors.white,
     colorScheme: ColorScheme.light(),
     brightness: Brightness.light,
+    canvasColor: JAVA,
   );
 }

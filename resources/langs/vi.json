@@ -1,0 +1,13 @@
+{
+    "app_title": "Kỹ thuật Pomodoro",
+    "break_all_cap": "NGHỈ NGƠI",
+    "status_description_running": "Pomodoro đang vận hành, tập trung vào công việc",
+    "status_description_pause": "Sẵn sàng bắt đầu Pomodoro?",
+    "status_description_running_short_break": "Nghỉ ngơi đi bạn ơi",
+    "status_description_pause_short_break": "Tiếp tục nghỉ ngơi",
+    "pause_all_cap": "TẠM DỪNG",
+    "reset_all_cap": "ĐẶT LẠI",
+    "resume_all_cap": "TIẾP TỤC",
+    "resume_break_all_cap": "TIẾP TỤC NGHỈ",
+    "start_all_cap": "BẮT ĐẦU"
+}

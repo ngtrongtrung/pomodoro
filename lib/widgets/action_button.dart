@@ -10,7 +10,8 @@ class ActionButton extends StatelessWidget {
   const ActionButton({this.onTap, required this.label, this.isFilled = false});
   @override
   Widget build(BuildContext context) {
-    final double diameter = 90.0;
+    Size windowSize = MediaQuery.of(context).size;
+    final double diameter = 90;
     final appThemeBloc = BlocProvider.of<AppThemeBloc>(context);
 
     Color getLabelColor() {

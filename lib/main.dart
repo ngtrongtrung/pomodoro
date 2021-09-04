@@ -1,14 +1,20 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pomodoro/blocs/app_theme/app_theme_bloc.dart';
-import 'package:pomodoro/blocs/app_theme/app_theme_event.dart';
-import 'package:pomodoro/blocs/app_theme/app_theme_state.dart';
+import 'package:pomodoro/blocs/app_theme/bloc_app_theme.dart';
 import 'package:pomodoro/screens/home_screen/home_screen.dart';
 import 'package:pomodoro/theme/app_theme.dart';
+import 'package:pomodoro/utils/constants.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await EasyLocalization.ensureInitialized();
   runApp(
-    MyApp(),
+    EasyLocalization(
+      child: MyApp(),
+      supportedLocales: languageCode,
+      path: 'resources/langs',
+    ),
   );
 }
 
@@ -35,6 +41,9 @@ class _MyAppState extends State<MyApp> {
             darkTheme: AppThemes.darkTheme,
             theme: AppThemes.lightTheme,
             home: HomeScreen(),
+            localizationsDelegates: context.localizationDelegates,
+            supportedLocales: context.supportedLocales,
+            locale: context.locale,
           );
         },
       ),

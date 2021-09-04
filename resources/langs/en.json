@@ -1,0 +1,13 @@
+{
+    "app_title": "Pomodoro Technique",
+    "break_all_cap": "BREAK",
+    "status_description_running": "Pomodoro is running, time to be focused",
+    "status_description_pause": "Ready for a focused Pomodoro?",
+    "status_description_running_short_break": "Short break running, time to relax",
+    "status_description_pause_short_break": "Let's have a short break",
+    "pause_all_cap": "PAUSE",
+    "reset_all_cap": "RESET",
+    "resume_all_cap": "RESUME",
+    "resume_break_all_cap": "RESUME BREAK",
+    "start_all_cap": "START"
+}

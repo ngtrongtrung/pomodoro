@@ -15,16 +15,16 @@ class MobileHomeScreen extends StatefulWidget {
   _MobileHomeScreenState createState() => _MobileHomeScreenState();
 }
 
-const _buttonTextStart = 'START';
-const _buttonTextResumePomodoro = "RESUME";
-const _buttonTextResumeBreak = "RESUME BREAK";
-const _buttonTextStartShortBreak = "BREAK";
-const _buttonTextPause = "PAUSE";
-const _buttonTextReset = "RESET";
+const _BUTTON_TEXT_START = 'start_all_cap';
+const _BUTTON_TEXT_RESUME = "resume_all_cap";
+const _BUTTON_TEXT_RESUME_BREAK = "resume_break_all_cap";
+const _BUTTON_TEXT_START_BREAK = "break_all_cap";
+const _BUTTON_TEXT_PAUSE = "pause_all_cap";
+const _BUTTON_TEXT_RESET = "reset_all_cap";
 
 class _MobileHomeScreenState extends State<MobileHomeScreen> {
   int _remainingTime = POMODORO_TOTAL_TIME;
-  String _mainButtonText = _buttonTextStart;
+  String _mainButtonText = _BUTTON_TEXT_START;
   PomodoroStatus pomodoroStatus = PomodoroStatus.PAUSED;
   Timer? _timer;
   late final appThemeBloc;
@@ -47,7 +47,7 @@ class _MobileHomeScreenState extends State<MobileHomeScreen> {
             pomodoroPercentage: this._getPomodoroPercentage(),
             timeRemain: _secondsToFormatedString(_remainingTime),
             statusColor: statusColor[pomodoroStatus] ?? Colors.transparent,
-            resetButtonText: _buttonTextReset,
+            resetButtonText: _BUTTON_TEXT_RESET,
             mainButtonText: this._mainButtonText,
             mainButtonPressed: this._mainButtonPressed,
             resetButtonPressed: this._resetButtonPressed,
@@ -58,7 +58,7 @@ class _MobileHomeScreenState extends State<MobileHomeScreen> {
             pomodoroPercentage: this._getPomodoroPercentage(),
             timeRemain: _secondsToFormatedString(_remainingTime),
             statusColor: statusColor[pomodoroStatus] ?? Colors.transparent,
-            resetButtonText: _buttonTextReset,
+            resetButtonText: _BUTTON_TEXT_RESET,
             mainButtonText: this._mainButtonText,
             mainButtonPressed: this._mainButtonPressed,
             resetButtonPressed: this._resetButtonPressed,
@@ -128,7 +128,7 @@ class _MobileHomeScreenState extends State<MobileHomeScreen> {
       if (_remainingTime > 0) {
         setState(() {
           _remainingTime--;
-          _mainButtonText = _buttonTextPause;
+          _mainButtonText = _BUTTON_TEXT_PAUSE;
         });
       } else {
         _playSound();
@@ -136,7 +136,7 @@ class _MobileHomeScreenState extends State<MobileHomeScreen> {
         pomodoroStatus = PomodoroStatus.PAUSED_SHORT_BREAK;
         setState(() {
           _remainingTime = SHORT_BREAK_TIME;
-          _mainButtonText = _buttonTextStartShortBreak;
+          _mainButtonText = _BUTTON_TEXT_START_BREAK;
         });
       }
     });
@@ -152,7 +152,7 @@ class _MobileHomeScreenState extends State<MobileHomeScreen> {
     pomodoroStatus = PomodoroStatus.PAUSED;
     _cancelTimer();
     setState(() {
-      _mainButtonText = _buttonTextResumePomodoro;
+      _mainButtonText = _BUTTON_TEXT_RESUME;
     });
   }
 
@@ -164,7 +164,7 @@ class _MobileHomeScreenState extends State<MobileHomeScreen> {
   void _stopCountdown() {
     pomodoroStatus = PomodoroStatus.PAUSED;
     setState(() {
-      _mainButtonText = _buttonTextStart;
+      _mainButtonText = _BUTTON_TEXT_START;
       _remainingTime = POMODORO_TOTAL_TIME;
     });
   }
@@ -177,14 +177,14 @@ class _MobileHomeScreenState extends State<MobileHomeScreen> {
   void _pauseBreakCountdown() {
     _cancelTimer();
     setState(() {
-      _mainButtonText = _buttonTextResumeBreak;
+      _mainButtonText = _BUTTON_TEXT_RESUME_BREAK;
     });
   }
 
   void _startShortBreak() {
     pomodoroStatus = PomodoroStatus.RUNNING_SHORT_BREAK;
     setState(() {
-      _mainButtonText = _buttonTextPause;
+      _mainButtonText = _BUTTON_TEXT_PAUSE;
     });
     _cancelTimer();
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
@@ -198,7 +198,7 @@ class _MobileHomeScreenState extends State<MobileHomeScreen> {
         _remainingTime = POMODORO_TOTAL_TIME;
         pomodoroStatus = PomodoroStatus.PAUSED;
         setState(() {
-          _mainButtonText = _buttonTextStart;
+          _mainButtonText = _BUTTON_TEXT_START;
         });
       }
     });

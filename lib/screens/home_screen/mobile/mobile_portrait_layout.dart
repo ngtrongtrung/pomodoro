@@ -1,9 +1,11 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:pomodoro/blocs/app_theme/app_theme_bloc.dart';
 import 'package:pomodoro/blocs/app_theme/app_theme_event.dart';
 import 'package:pomodoro/widgets/action_button.dart';
+import 'package:pomodoro/widgets/drop_down/language_drop_down.dart';
 
 class MobilePortraitLayout extends StatefulWidget {
   final double pomodoroPercentage;
@@ -40,6 +42,7 @@ class _MobilePortraitLayoutState extends State<MobilePortraitLayout> {
 
   @override
   Widget build(BuildContext context) {
+    Size windowSize = MediaQuery.of(context).size;
     return Scaffold(
       body: SafeArea(
         child: Center(
@@ -49,26 +52,26 @@ class _MobilePortraitLayoutState extends State<MobilePortraitLayout> {
                 flex: 2,
                 child: Column(
                   children: [
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        IconButton(
-                          onPressed: () {
-                            appThemeBloc.add(ToggleAppTheme());
-                          },
-                          icon: Icon(appThemeBloc.isDarkMode
-                              ? Icons.dark_mode
-                              : Icons.dark_mode_outlined),
-                          padding: EdgeInsets.all(4),
-                          iconSize: 26.0,
-                        )
-                      ],
+                    Padding(
+                      padding: EdgeInsets.only(top: 10, left: 20, right: 20),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          LanguageDropdown(),
+                          IconButton(
+                            onPressed: () {
+                              appThemeBloc.add(ToggleAppTheme());
+                            },
+                            icon: Icon(appThemeBloc.isDarkMode
+                                ? Icons.dark_mode
+                                : Icons.dark_mode_outlined),
+                            iconSize: 26.0,
+                          )
+                        ],
+                      ),
                     ),
                     Text(
-                      'Pomodoro Technique',
+                      tr('app_title'),
                       style:
                           TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
                     ),
@@ -81,14 +84,14 @@ class _MobilePortraitLayoutState extends State<MobilePortraitLayout> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     CircularPercentIndicator(
-                      radius: 220.0,
+                      radius: windowSize.height * 0.3,
                       lineWidth: 15.0,
                       percent: widget.pomodoroPercentage,
                       circularStrokeCap: CircularStrokeCap.round,
                       center: Text(
                         widget.timeRemain,
                         style: TextStyle(
-                          fontSize: 48,
+                          fontSize: windowSize.height * 0.05,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -109,19 +112,17 @@ class _MobilePortraitLayoutState extends State<MobilePortraitLayout> {
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         ActionButton(
-                          label: widget.resetButtonText,
+                          label: tr(widget.mainButtonText),
                           onTap: widget.resetButtonPressed,
                         ),
                         ActionButton(
-                          label: widget.mainButtonText,
+                          label: tr(widget.resetButtonText),
                           onTap: widget.mainButtonPressed,
                           isFilled: true,
                         ),
                       ],
                     ),
-                    Text(
-                      widget.description,
-                    ),
+                    Text(tr(widget.description)),
                   ],
                 ),
               )
