@@ -13,7 +13,7 @@ void main() async {
     EasyLocalization(
       child: MyApp(),
       supportedLocales: languageCode,
-      path: 'resources/langs',
+      path: 'assets/langs',
     ),
   );
 }
@@ -28,25 +28,28 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<AppThemeBloc>(
-      create: (context) => AppThemeBloc()..add(GetAppThemeFromStorage()),
-      child: BlocBuilder<AppThemeBloc, AppThemeState>(
-        builder: (context, state) {
-          if (state is AppThemeInitial) return Container();
-          ThemeMode themeMode = state.props[0] as ThemeMode;
-          return MaterialApp(
-            title: 'Pomodoro',
-            debugShowCheckedModeBanner: false,
-            themeMode: themeMode,
-            darkTheme: AppThemes.darkTheme,
-            theme: AppThemes.lightTheme,
-            home: HomeScreen(),
-            localizationsDelegates: context.localizationDelegates,
-            supportedLocales: context.supportedLocales,
-            locale: context.locale,
-          );
-        },
-      ),
-    );
+    return MultiBlocProvider(
+        providers: [
+          BlocProvider<AppThemeBloc>(
+            create: (context) => AppThemeBloc()..add(GetAppThemeFromStorage()),
+          )
+        ],
+        child: BlocBuilder<AppThemeBloc, AppThemeState>(
+          builder: (context, state) {
+            if (state is AppThemeInitial) return Container();
+            ThemeMode themeMode = state.props[0] as ThemeMode;
+            return MaterialApp(
+              title: 'Pomodoro',
+              debugShowCheckedModeBanner: false,
+              themeMode: themeMode,
+              darkTheme: AppThemes.darkTheme,
+              theme: AppThemes.lightTheme,
+              home: HomeScreen(),
+              localizationsDelegates: context.localizationDelegates,
+              supportedLocales: context.supportedLocales,
+              locale: context.locale,
+            );
+          },
+        ));
   }
 }

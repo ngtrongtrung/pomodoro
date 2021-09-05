@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pomodoro/blocs/app_theme/app_theme_bloc.dart';
@@ -28,14 +29,12 @@ class _MobileHomeScreenState extends State<MobileHomeScreen> {
   PomodoroStatus pomodoroStatus = PomodoroStatus.PAUSED;
   Timer? _timer;
   late final appThemeBloc;
+  AudioCache audioCache = AudioCache();
+
   @override
   void initState() {
     super.initState();
     appThemeBloc = BlocProvider.of<AppThemeBloc>(context);
-  }
-
-  Widget getLayoutWhenLandscape() {
-    return Container();
   }
 
   @override
@@ -72,6 +71,7 @@ class _MobileHomeScreenState extends State<MobileHomeScreen> {
   @override
   void dispose() {
     _cancelTimer();
+    this.audioCache.clearAll();
     super.dispose();
   }
 
@@ -204,7 +204,7 @@ class _MobileHomeScreenState extends State<MobileHomeScreen> {
     });
   }
 
-  void _playSound() {
-    debugPrint('playSound');
+  void _playSound() async {
+    await audioCache.play('mp3/ringtone.mp3');
   }
 }

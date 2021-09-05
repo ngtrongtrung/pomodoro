@@ -112,11 +112,11 @@ class _MobilePortraitLayoutState extends State<MobilePortraitLayout> {
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         ActionButton(
-                          label: tr(widget.mainButtonText),
+                          label: tr(widget.resetButtonText),
                           onTap: widget.resetButtonPressed,
                         ),
                         ActionButton(
-                          label: tr(widget.resetButtonText),
+                          label: tr(widget.mainButtonText),
                           onTap: widget.mainButtonPressed,
                           isFilled: true,
                         ),

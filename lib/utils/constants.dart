@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:pomodoro/models/pomodoro_status.dart';
 import 'package:pomodoro/theme/app_color.dart';
 
-const int POMODORO_TOTAL_TIME = 20;
-const int SHORT_BREAK_TIME = 10;
+const int POMODORO_TOTAL_TIME = 25 * 60;
+const int SHORT_BREAK_TIME = 5 * 60;
 
 const Map<PomodoroStatus, String> statusDescription = {
   PomodoroStatus.RUNNING: 'status_description_running',
